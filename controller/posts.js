@@ -19,26 +19,37 @@ export async function getPost (req, res) {
 }
 
 export async function createPost(req, res) {
-    const {username, anonymous, title, text, category, period, postingPeriod, comment, profanity, sex} = req.body;
-    const post = await postRepository.create(username, anonymous, title, text, category, period, postingPeriod, comment, profanity, sex);
+    const {userId, anonymous, title, text, category, postingPeriod, comment, profanity, sex} = req.body;
+    const post = await postRepository.create(userId, anonymous, title, text, category, postingPeriod, comment, profanity, sex);
     res.status(201).json(post);
 }
 
 export async function updatePost(req, res) {
     const id = req.params.id;
-    const {title, text, category, postingPeriod, comment, profanity, sex} = req.body;
-    const post = await postRepository.update(id, title, text, category, postingPeriod, comment, profanity, sex);
-    console.log(post);
-    if (post) {
-        
-        res.status(200).json(post);
-    } else {
+    const {title, anonymous, text, category, postingPeriod, comment, profanity, sex} = req.body;
+    const post = await postRepository.getById(id);
+    if (!post) {
         res.status(404).json({ message: `Post id(${id}) not found`});
     }
+    console.log(post.userId);
+    console.log(req.userId);
+    if (post.userId !== req.userId) {   //req.userId는 라우터에서 updatePost로 들어오기전 isAuth에서 얻어짐.
+        return res.sendStatus(403);
+    }
+    const updated = await postRepository.update(id, anonymous, title, text, category, postingPeriod, comment, profanity, sex);
+    res.status(200).json(updated);
 }
 
 export async function deletePost(req, res, next) {
     const id = req.params.id;
+    const post = await postRepository.getById(id);
+    if (!post) {
+        res.status(404).json({ message: `Post id(${id}) not found`});
+    }
+    
+    if (post.userId !== req.userId) {   //req.userId는 라우터에서 updatePost로 들어오기전 isAuth에서 얻어짐.
+        return res.sendStatus(403);
+    }
     await postRepository.remove(id);
     res.sendStatus(204);
 }
