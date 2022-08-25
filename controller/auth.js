@@ -24,7 +24,8 @@ export async function signup(req, res) {
     });
 
     const token = createJwtToken(userId);
-    res.status(201).json({token, username, userId});
+    res.status(201).json({token, username, userId});//email 클라이언트로 안보내주네 여기서.
+    //token을 받아서 localstorage에 저장을 해야겠지.
 }
 
 //회원 가입할 때, 보내준 비밀번호를 암호화시켜서 서버에 저장해놓는다,
@@ -42,23 +43,24 @@ export async function login(req, res) {
     if (!isValidPassword) {
         return res.status(401).json({message: 'Invalid user or password'});
     }
-    const id = user.id
-    const token = createJwtToken(id); 
-    res.status(200).json({token, email, id});
+    const userId = user.userId;
+    const token = createJwtToken(userId); 
+    res.status(200).json({token, email, userId});
 }
 //로그인 했을 때, 사용자가 제공한 username이 존재하면 사용자가 제공한 password가 맞는 지 서버에 저장된 해시된 비밀번호와 비교 후,
 //맞으면 그 username과 password와 함께 묶여 user:{id, username, 해시된 password, email}에 
 //저장되 있는 user.id를 토큰으로 클라이언트에 보낸다.
 
-function createJwtToken(id) {
-    return jwt.sign({id}, jwtSecretKey, {expiresIn: jwtExpiresInDays});
+function createJwtToken(userId) {
+    return jwt.sign({userId}, jwtSecretKey, {expiresIn: jwtExpiresInDays});
 }
 
 export async function me(req, res, next) {
+    console.log(req.userId);
     const user = await userRepository.findById(req.userId);
     if (!user) {
         return res.status(404).json({ message: 'User not found'});
     }
-    res.status(200).json({ token: req.token, username: user.username, id: user.id});
+    res.status(200).json({ token: req.token, username: user.username, id: user.userId});
 }
 //   /me로 get요청을 받으면 isAuth에서 id가 존재하는 지 확인 후 여기 me로 와서 username도 응답에 보내 주는 거.

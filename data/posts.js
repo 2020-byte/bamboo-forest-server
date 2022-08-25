@@ -110,6 +110,7 @@ let posts = [
     },
 ];
 
+let num = 0;
 //같은 단어 한꺼번에 클릭 crt + shift + l
 export async function getAll() {
     // return posts; user정보가 post에 이제 userId밖에 없으니
@@ -143,11 +144,14 @@ export async function getById(id) {
     if(!found) {
         return null;
     }
+    console.log(found);
     const { username } = await userRepository.findById(found.userId);
+    console.log(username);
     return {...found, username};
 }
 
 export async function create( userId, anonymous, title, text, category, postingPeriod, comment, profanity, sex) {
+    console.log(userId+" data");
     const post = {
         id: Date.now().toString(),
         anonymous,
