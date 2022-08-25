@@ -1,2 +1,3 @@
 # bamboo-forest-server
-# working on it
+## 1) CRUD
+## 2) Auth
