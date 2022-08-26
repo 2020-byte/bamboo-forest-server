@@ -4,6 +4,8 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import postsRouter from './router/posts.js'
 import authRouter from './router/auth.js';
+import { config } from './config.js';
+
 
 const app = express();
 
@@ -24,6 +26,6 @@ app.use((error, req, res, next) => {
     console.log(error);
     res.sendStatus(500);
 });
-app.listen(5050);
+app.listen(config.host.port);
 
 

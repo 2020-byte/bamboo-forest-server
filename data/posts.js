@@ -140,18 +140,20 @@ export async function getById(id) {
     // return posts.find((p) => p.id === id);
     //getAll로 모드 post를 user정보와 합친 다음에 가져오지 않고
     //먼저 특정 user id를 가진 post를 찾고 그것만 user정보와 합쳐서 return
+    console.log(id);
+    console.log(posts);
     const found = posts.find((post) => post.id === id);
     if(!found) {
         return null;
     }
-    console.log(found);
+    //console.log(found);
     const { username } = await userRepository.findById(found.userId);
-    console.log(username);
+    //console.log(username);
     return {...found, username};
 }
 
 export async function create( userId, anonymous, title, text, category, postingPeriod, comment, profanity, sex) {
-    console.log(userId+" data");
+    //console.log(userId+" data");
     const post = {
         id: Date.now().toString(),
         anonymous,
@@ -164,6 +166,7 @@ export async function create( userId, anonymous, title, text, category, postingP
         profanity, 
         sex,
     };
+    //console.log(posts);
     posts = [post, ...posts];
     //user정보배고 userId만 post 정보에 넣어주고(데이터베이스에서 새로 만든 post정보 저장 할 때), 
     return getById(post.id);    //꺼낼 때 userId를 가지고 다시 합침

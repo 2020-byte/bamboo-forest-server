@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { config } from '../config.js';
 import * as userRepository from '../data/auth.js';
 
 const AUTH_ERROR = { message: 'Authentication Error'};
@@ -16,15 +17,12 @@ export const isAuth = async (req, res, next) => {   //isAuth는 header에 author
     //TODO: Make it secure!
     jwt.verify(
         token,
-        'qweruiop56781234',
+        config.jwt.secretKey,
         async (error, decoded) => {
             if (error) {
                 return res.status(401).json(AUTH_ERROR);
             }
-            console.log(decoded.id);
-            console.log(decoded.userId);
             const user = await userRepository.findById(decoded.userId);
-            console.log(user);
             if (!user) {
                 return res.status(401).json(AUTH_ERROR);
             }
