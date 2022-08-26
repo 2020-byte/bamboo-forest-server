@@ -22,7 +22,9 @@ export async function createPost(req, res) {
     //userId를 클라이언트의 user state 배열에서 받아오는 게 아니라 로컬스토리지에 저장해났잖아. 유저정보를 그거 가지고 유저가 맞는지 확인해주는게 미들웨어 isAuth고 그러면 isAuth를 이용해서 userId를 가져와야지.
     //delete, edit할 때 user state도 이용하는 건 UI를 변경시켜야 하기 때문이고.
     const {anonymous, title, text, category, postingPeriod, comment, profanity, sex} = req.body;
-    const post = await postRepository.create(req.userId, anonymous, title, text, category, postingPeriod, comment, profanity, sex);
+    console.log(req.userId);
+    const userId = req.userId;
+    const post = await postRepository.create({ anonymous, category, title, text, postingPeriod, comment, profanity, sex, userId});
     res.status(201).json(post);
 }
 
