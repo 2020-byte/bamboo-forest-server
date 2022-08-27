@@ -33,6 +33,7 @@ export const isAuth = async (req, res, next) => {   //isAuth는 header에 author
             //이거 isAuth 요청 다음에 뒤를 잇는 또 다른 요청들이 있잖아.
             //auth 판별이 된 후 있다면 그 user의 id를 req.userId에 담고,
             //그 다음 요청들에서 req.userId을 가지고 요청 접근권한이 확인되는 듯.
+            req.token = token;
             next();
         }
     )
