@@ -299,7 +299,8 @@ export async function update(id, anonymous, title, text, category, postingPeriod
             post.profanity = profanity;
             post.sex = sex;
             post.category = category;
-            console.log(post.dataValues);
+            // console.log("post.dataValue: ")
+            // console.log(post.dataValues);
             return post.save(); //save작동 안됫떤 이유는 update할 때 새로운 값이 될 받아온 anonymous(string('no'))가 데이터베이스 anonymous(boolean)의 타입이랑 달랐음.
             //return post.dataValues;
             //sequlize 문법 save 저장한 자기 자신을 return함.
