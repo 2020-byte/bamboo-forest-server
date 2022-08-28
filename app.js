@@ -17,7 +17,7 @@ const corsOption = {
 
 app.use(express.json());
 app.use(helmet());
-app.use(cors(corsOption));
+app.use(cors());
 app.use(morgan('tiny'));
 
 
@@ -36,7 +36,6 @@ app.use((error, req, res, next) => {
 //sync is not defined 에러 import잘 못해서 발생했었음.
 sequelize.sync().then(() =>{
     console.log(`Server is started... ${new Date()}`);
-    console.log(config.cors.allowedOrigin);
     app.listen(config.port);
 });
 
